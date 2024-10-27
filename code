@@ -1,0 +1,65 @@
+int IRSensor1 = 1; 
+int IRSensor2 = 2;
+int LDRSensor = A3; // LDR connected to analog pin A3
+int ledIR1 = 6;     // LED for IRSensor1 connected to pin 6
+int ledIR2 = 7;     // LED for IRSensor2 connected to pin 7
+
+void setup() 
+{
+  pinMode(IRSensor1, INPUT); 
+  pinMode(IRSensor2, INPUT);
+  pinMode(ledIR1, OUTPUT);    // Set LED for IRSensor1 as output
+  pinMode(ledIR2, OUTPUT);    // Set LED for IRSensor2 as output
+  pinMode(13, OUTPUT);        // Control another output if needed
+}
+
+void loop()
+{
+  int statusSensor1 = digitalRead(IRSensor1);
+  int statusSensor2 = digitalRead(IRSensor2);
+  int ldrValue = analogRead(LDRSensor); // Read the LDR value
+
+  // Define threshold for light intensity
+  int threshold = 512; // Adjust this value as needed
+
+  // Check IRSensor1
+  if (statusSensor1 == 0) // If IRSensor1 is triggered
+  {
+    if (ldrValue < threshold) // Low light intensity
+    {
+      digitalWrite(ledIR1, HIGH);  // Turn ON LED for IRSensor1
+    }
+    else // High light intensity
+    {
+      digitalWrite(ledIR1, LOW);    // Turn OFF LED for IRSensor1
+    }
+  }
+  else
+  {
+    digitalWrite(ledIR1, LOW); // Turn OFF LED for IRSensor1 if not triggered
+  }
+
+  // Check IRSensor2
+  if (statusSensor2 == 0) // If IRSensor2 is triggered
+  {
+    if (ldrValue < threshold) // Low light intensity
+    {
+      digitalWrite(ledIR2, HIGH);  // Turn ON LED for IRSensor2
+    }
+    else // High light intensity
+    {
+      digitalWrite(ledIR2, LOW);    // Turn OFF LED for IRSensor2
+    }
+  }
+  else
+  {
+    digitalWrite(ledIR2, LOW); // Turn OFF LED for IRSensor2 if not triggered
+  }
+
+  // Optionally, turn on LED on Pin 13 if either IR sensor is triggered
+  if (statusSensor1 == 0 || statusSensor2 == 0) {
+    digitalWrite(13, HIGH);
+  } else {
+    digitalWrite(13, LOW);
+  }
+}
